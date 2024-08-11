@@ -1,2 +1,2 @@
 # digit recognition
- digit recognition using the MNIST dataset
+ handwritten digit recognition on the MNIST dataset using torch.nn 
