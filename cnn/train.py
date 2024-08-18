@@ -27,3 +27,12 @@ TRAIN_SPLIT = 0.75
 VALID_SPLIT = 1 - TRAIN_SPLIT
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+# loading  the KMNIST dataset
+trainData = KMNIST(root="data", train=True, download=True, transform=ToTensor())
+testData = KMNIST(root="data", train=False, download=True, transform=ToTensor())
+
+# calculating the train/validation split
+numTrainSamples = int(len(trainData) * TRAIN_SPLIT)
+numValidSamples = int(len(trainData) * VALID_SPLIT)
+(trainData, validData) = random_split(trainData, [numTrainSamples, numValidSamples],generator=torch.Generator().manual_seed(42))
