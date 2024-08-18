@@ -29,8 +29,8 @@ VALID_SPLIT = 1 - TRAIN_SPLIT
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # loading  the KMNIST dataset
-trainData = KMNIST(root="data", train=True, download=True, transform=ToTensor())
-testData = KMNIST(root="data", train=False, download=True, transform=ToTensor())
+trainData = KMNIST(root="cnn", train=True, download=True, transform=ToTensor())
+testData = KMNIST(root="cnn", train=False, download=True, transform=ToTensor())
 
 # calculating the train/validation split
 numTrainSamples = int(len(trainData) * TRAIN_SPLIT)
