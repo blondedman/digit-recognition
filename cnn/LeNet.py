@@ -18,10 +18,10 @@ class LeNet(nn.Module):
         self.relu2 = nn.ReLU()
         self.maxp2 = nn.MaxPool2d(kernel_size=(2, 2), stride=(2, 2))
 
-        self.fc1 = nn.Linear(in_features=800, out_features=500)
+        self.fc1 = nn.Linear(800, 500)
         self.relu3 = nn.ReLU()
         
-        self.fc2 = nn.Linear(in_features=500, out_features=classes)
+        self.fc2 = nn.Linear(500, classes)
         self.logSoftmax = nn.LogSoftmax(dim=1)
     
     def forward(self, x):	
