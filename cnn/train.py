@@ -62,39 +62,51 @@ start = time.time()
 # looping over our epochs
 for e in range(0, EPOCHS):
     
-	model.train()
+    model.train()
  
-	totalTrainLoss = 0
-	totalValidLoss = 0
+    totalTrainLoss = 0
+    totalValidLoss = 0
  
-	trainCorrect = 0
-	validCorrect = 0
+    trainCorrect = 0
+    validCorrect = 0
  
-	# looping over the training set
-	for (x, y) in trainDataLoader:
+    # looping over the training set
+    for (x, y) in trainDataLoader:
      
-		(x, y) = (x.to(device), y.to(device))
+        (x, y) = (x.to(device), y.to(device))
   
-		pred = model(x)
-		loss = loss(pred, y)
+        pred = model(x)
+        loss = loss(pred, y)
   
-		optimizer.zero_grad()
-		loss.backward()
-		optimizer.step()
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
   
-		totalTrainLoss += loss
-		trainCorrect += (pred.argmax(1) == y).type(torch.float).sum().item()
+        totalTrainLoss += loss
+        trainCorrect += (pred.argmax(1) == y).type(torch.float).sum().item()
   
-  	# switching off autograd for evaluation
-	with torch.no_grad():
+      # switching off autograd for evaluation
+    with torch.no_grad():
   
-		model.eval()
+        model.eval()
   
-		for (x, y) in validDataLoader:
+        for (x, y) in validDataLoader:
    
-			(x, y) = (x.to(device), y.to(device))
+            (x, y) = (x.to(device), y.to(device))
    
-			pred = model(x)
-			totalValidLoss += loss(pred, y)
+            pred = model(x)
+            totalValidLoss += loss(pred, y)
    
-			validCorrect += (pred.argmax(1) == y).type(torch.float).sum().item()
+            validCorrect += (pred.argmax(1) == y).type(torch.float).sum().item()
+
+    avgTrainLoss = totalTrainLoss / trainSteps
+    avgValidLoss = totalValidLoss / validSteps
+    
+    trainCorrect = trainCorrect / len(trainDataLoader.dataset)
+    validCorrect = validCorrect / len(validDataLoader.dataset)
+
+    history["trainLoss"].append(avgTrainLoss.cpu().detach().numpy())
+    history["trainAccuracy"].append(trainCorrect)
+    history["validLoss"].append(avgValidLoss.cpu().detach().numpy())
+    history["validAccuracy"].append(validCorrect)
+    
