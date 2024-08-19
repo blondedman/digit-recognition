@@ -45,3 +45,42 @@ testDataLoader = DataLoader(testData, batch_size=BATCH_SIZE)
 # calculating steps per epoch for training and validation set
 trainSteps = len(trainDataLoader.dataset) // BATCH_SIZE
 validSteps = len(validDataLoader.dataset) // BATCH_SIZE
+
+# initializing the LeNet model
+model = LeNet(channels=1, classes=len(trainData.dataset.classes)).to(device)
+
+# initializing the optimizer anf loss function
+optimizer = Adam(model.parameters(), lr = INIT_LR)
+loss = nn.NLLLoss()
+
+# initializing a dictionary to store training historg
+history = {"trainLoss": [], "trainAccuracy": [], "validLoss": [], "validAccuracy": []}
+
+# measuring training time
+start = time.time()
+
+# looping over our epochs
+for e in range(0, EPOCHS):
+    
+	model.train()
+ 
+	totalTrainLoss = 0
+	totalValidLoss = 0
+ 
+	trainCorrect = 0
+	validCorrect = 0
+ 
+	# looping over the training set
+	for (x, y) in trainDataLoader:
+     
+		(x, y) = (x.to(device), y.to(device))
+  
+		pred = model(x)
+		loss = loss(pred, y)
+  
+		optimizer.zero_grad()
+		loss.backward()
+		optimizer.step()
+  
+		totalTrainLoss += loss
+		trainCorrect += (pred.argmax(1) == y).type(torch.float).sum().item()
