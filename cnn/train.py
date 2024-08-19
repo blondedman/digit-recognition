@@ -110,3 +110,26 @@ for e in range(0, EPOCHS):
     history["validLoss"].append(avgValidLoss.cpu().detach().numpy())
     history["validAccuracy"].append(validCorrect)
     
+    print("EPOCH: {}/{}".format(e + 1, EPOCHS))
+    print("Train loss: {:.6f}, Train accuracy: {:.4f}".format(avgTrainLoss, trainCorrect))
+    print("Valid loss: {:.6f}, Val accuracy: {:.4f}\n".format(avgValidLoss, validCorrect))
+    
+end = time.time()
+print("time taken to train the model: {:.2f}s".format(end - start))
+
+with torch.no_grad():
+ 
+	model.eval()
+	
+	preds = []
+ 
+	# looping over the test set
+	for (x, y) in testDataLoader:
+  
+		x = x.to(device)
+  
+		pred = model(x)
+		preds.extend(pred.argmax(axis=1).cpu().numpy())
+  
+# generating a classification report
+print(classification_report(testData.targets.cpu().numpy(), np.array(preds), target_names=testData.classes))
