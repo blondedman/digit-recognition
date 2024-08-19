@@ -84,3 +84,17 @@ for e in range(0, EPOCHS):
   
 		totalTrainLoss += loss
 		trainCorrect += (pred.argmax(1) == y).type(torch.float).sum().item()
+  
+  	# switching off autograd for evaluation
+	with torch.no_grad():
+  
+		model.eval()
+  
+		for (x, y) in validDataLoader:
+   
+			(x, y) = (x.to(device), y.to(device))
+   
+			pred = model(x)
+			totalValidLoss += loss(pred, y)
+   
+			validCorrect += (pred.argmax(1) == y).type(torch.float).sum().item()
