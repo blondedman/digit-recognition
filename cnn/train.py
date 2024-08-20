@@ -133,3 +133,17 @@ with torch.no_grad():
   
 # generating a classification report
 print(classification_report(testData.targets.cpu().numpy(), np.array(preds), target_names=testData.classes))
+
+plt.style.use("ggplot")
+plt.figure()
+plt.plot(history["trainLoss"], label="train loss")
+plt.plot(history["validLoss"], label="valid loss")
+plt.plot(history["trainAccuracy"], label="train accuracy")
+plt.plot(history["validAccuracy"], label="valid_accuracy")
+plt.title("Training Loss and Accuracy on Dataset")
+plt.xlabel("EPOCH #")
+plt.ylabel("Loss/Accuracy")
+plt.legend(loc="lower left")
+plt.savefig("plot.png")
+
+torch.save(model, "model.pth")
