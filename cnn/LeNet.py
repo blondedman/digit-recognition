@@ -2,15 +2,16 @@ import torch
 import torchvision
 
 import torch.nn as nn
+import torch.nn.functional as F
 
 class LeNet(nn.Module):
     
-    def __int__(self, channels, classes):
+    def __int__(self, classes):
         
         # call to parent construct
-        super(LeNet, self).__init__
+        super().__init__()
         
-        self.conv1 = nn.Conv2d(channels, 20, kernel_size=(5, 5))
+        self.conv1 = nn.Conv2d(1, 20, kernel_size=(5, 5))
         self.relu1 = nn.ReLU()
         self.maxp1 = nn.MaxPool2d(kernel_size=(2,2), stride=(2,2))
         
@@ -21,18 +22,18 @@ class LeNet(nn.Module):
         self.fc1 = nn.Linear(800, 500)
         self.relu3 = nn.ReLU()
         
-        self.fc2 = nn.Linear(500, classes)
-        self.logSoftmax = nn.LogSoftmax(dim=1)
+        self.fc2 = nn.Linear(500, 10)
+        self.logSoftmax = F.log_softmax(dim=1)
     
     def forward(self, x):	
         	
         x = self.conv1(x)
         x = self.relu1(x)
-        x = self.maxpool1(x)
+        x = self.maxp1(x)
         
         x = self.conv2(x)
         x = self.relu2(x)
-        x = self.maxpool2(x)
+        x = self.maxp2(x)
         
         x = nn.flatten(x, 1)
         x = self.fc1(x)
@@ -42,3 +43,6 @@ class LeNet(nn.Module):
         output = self.logSoftmax(x)
         
         return output
+
+model = LeNet()
+print(model)

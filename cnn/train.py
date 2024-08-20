@@ -1,7 +1,7 @@
 import matplotlib
 matplotlib.use("agg")
 
-import LeNet
+from LeNet import LeNet
 
 from sklearn.metrics import classification_report
 
@@ -10,7 +10,7 @@ from torchvision.datasets import KMNIST
 
 from torch.utils.data import random_split
 from torch.utils.data import DataLoader
-from torch.optim import Adam
+from torch import optim
 from torch import nn
 
 import matplotlib.pyplot as plt
@@ -19,7 +19,7 @@ import argparse
 import torch
 import time
 
-INIT_LR = 1e-3
+INIT_LR = 0.001
 BATCH_SIZE = 64
 EPOCHS = 10
 
@@ -46,11 +46,13 @@ testDataLoader = DataLoader(testData, batch_size=BATCH_SIZE)
 trainSteps = len(trainDataLoader.dataset) // BATCH_SIZE
 validSteps = len(validDataLoader.dataset) // BATCH_SIZE
 
+print(len(trainData.dataset.classes))
+
 # initializing the LeNet model
-model = LeNet(channels=1, classes=len(trainData.dataset.classes)).to(device)
+model = LeNet().to(device)
 
 # initializing the optimizer anf loss function
-optimizer = Adam(model.parameters(), lr = INIT_LR)
+optimizer = optim.Adam(model.parameters(), lr = INIT_LR)
 loss = nn.NLLLoss()
 
 # initializing a dictionary to store training historg
