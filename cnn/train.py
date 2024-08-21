@@ -15,7 +15,6 @@ from torch import nn
 
 import matplotlib.pyplot as plt
 import numpy as np
-import argparse
 import torch
 import time
 
@@ -115,7 +114,7 @@ for e in range(0, EPOCHS):
     print("Valid Loss: {:.6f}, Valid Accuracy: {:.4f}\n".format(avgValidLoss, validCorrect))
     
 end = time.time()
-print("time taken to train the model: {:.2f}s".format(end - start))
+print("time taken to train the model: {:.4f}s".format(end - start))
 
 with torch.no_grad():
  
