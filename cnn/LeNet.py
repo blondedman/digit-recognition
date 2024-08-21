@@ -21,10 +21,10 @@ class LeNet(nn.Module):
             nn.MaxPool2d(2, 2),                
         )
         
-        # self.out = nn.Linear(32 * 7 * 7, 10)
         self.fc1 = nn.Linear(in_features=800, out_features=500)
         self.rel = nn.ReLU()
         self.fc2 = nn.Linear(in_features=500, out_features=10)
+        
         self.out = nn.LogSoftmax(dim=1)
         
     def forward(self, x):
@@ -35,6 +35,7 @@ class LeNet(nn.Module):
         x = self.fc1(x)
         x = self.rel(x)
         x = self.fc2(x)
+        
         output = self.out(x)
         return output
 
