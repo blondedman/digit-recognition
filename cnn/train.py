@@ -19,7 +19,7 @@ import argparse
 import torch
 import time
 
-INIT_LR = 0.001
+INIT_LR = 1e-3
 BATCH_SIZE = 64
 EPOCHS = 10
 
@@ -46,14 +46,12 @@ testDataLoader = DataLoader(testData, batch_size=BATCH_SIZE)
 trainSteps = len(trainDataLoader.dataset) // BATCH_SIZE
 validSteps = len(validDataLoader.dataset) // BATCH_SIZE
 
-print(len(trainData.dataset.classes))
-
 # initializing the LeNet model
 model = LeNet().to(device)
 
 # initializing the optimizer anf loss function
 optimizer = optim.Adam(model.parameters(), lr = INIT_LR)
-loss = nn.NLLLoss()
+criterion = nn.NLLLoss()
 
 # initializing a dictionary to store training historg
 history = {"trainLoss": [], "trainAccuracy": [], "validLoss": [], "validAccuracy": []}
@@ -78,7 +76,7 @@ for e in range(0, EPOCHS):
         (x, y) = (x.to(device), y.to(device))
   
         pred = model(x)
-        loss = loss(pred, y)
+        loss = criterion(pred, y)
   
         optimizer.zero_grad()
         loss.backward()
@@ -97,7 +95,7 @@ for e in range(0, EPOCHS):
             (x, y) = (x.to(device), y.to(device))
    
             pred = model(x)
-            totalValidLoss += loss(pred, y)
+            totalValidLoss += criterion(pred, y)
    
             validCorrect += (pred.argmax(1) == y).type(torch.float).sum().item()
 
@@ -113,8 +111,8 @@ for e in range(0, EPOCHS):
     history["validAccuracy"].append(validCorrect)
     
     print("EPOCH: {}/{}".format(e + 1, EPOCHS))
-    print("Train loss: {:.6f}, Train accuracy: {:.4f}".format(avgTrainLoss, trainCorrect))
-    print("Valid loss: {:.6f}, Val accuracy: {:.4f}\n".format(avgValidLoss, validCorrect))
+    print("Train Loss: {:.6f}, Train Accuracy: {:.4f}".format(avgTrainLoss, trainCorrect))
+    print("Valid Loss: {:.6f}, Valid Accuracy: {:.4f}\n".format(avgValidLoss, validCorrect))
     
 end = time.time()
 print("time taken to train the model: {:.2f}s".format(end - start))
@@ -146,6 +144,6 @@ plt.title("Training Loss and Accuracy on Dataset")
 plt.xlabel("EPOCH #")
 plt.ylabel("Loss/Accuracy")
 plt.legend(loc="lower left")
-plt.savefig("plot.png")
+plt.savefig("cnn/plot.png")
 
-torch.save(model, "model.pth")
+torch.save(model, "cnn/model.pth")
